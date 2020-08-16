@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Welcome to Buddyup</title>
+    {% load staticfiles %}
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="{%static 'style.css'%}">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+        integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous">
+    </script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+        integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+
+    </script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
+    </script>
+</head>
+
+<body oncontextmenu="return false;">
+
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header text-align-center">
+            </div>
+
+            <ul class="list-unstyled components">
+                <li id="1">
+                    <a href="/home/submit">
+                        <i class="fas fa-home"></i>
+                        &nbsp; dashboard
+                    </a>
+
+                </li>
+                <li class="active" id="2">
+                    <a href="/core/follower">
+                        <i class="fas fa-user-plus"></i>
+                        &nbsp; followers
+                    </a>
+
+                    <div class="collapse list-unstyled" id="pageSubmenu">
+
+                    </div>
+                </li>
+
+                <li id="4">
+                    <a href="/home/about">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        &nbsp; help
+                    </a>
+                </li>
+            </ul>
+
+
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+                <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
+                     <a class="navbar-brand brand-logo" href="/home/submit">
+                         <img src="{%static 'images/buddyup-logo.png'%}" alt="logo"
+                             style="width: 170px; height:70px;margin-left:0;" /> </a>
+                     <a class="navbar-brand brand-logo-mini" href="/home/submit">
+                         <img src="#" alt="logo" /> </a>
+                </div>
+                <div class="navbar-menu-wrapper d-flex align-items-center">
+                    <ul class="navbar-nav ml-auto">
+
+                        
+                        <li class="nav-item dropdown d-none d-xl-inline-block">
+                            <a class="nav-link" id="UserDropdown" data-toggle="dropdown" aria-expanded="false"
+                                style="cursor: pointer;">
+                                <i class="fa fa-user-circle" aria-hidden="true"></i> &nbsp;{{ Message}} &nbsp; <i
+                                    class="fa fa-angle-down" aria-hidden="true"></i>
+                                      <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                                          aria-labelledby="UserDropdown">
+                                     <a class="dropdown-item" href="/logout/logout">Sign Out &nbsp;<i
+                                             class="fas fa-sign-out-alt    "></i></a></div>
+                        </li>
+                    </ul>
+                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                        data-toggle="offcanvas">
+                        <span class="mdi mdi-menu"></span>
+                    </button>
+                </div>
+            </nav>
+            <div class="content-wrapper">
+                <h2>{{Message}}'s followers details!</u> </h2>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-8" id="col1" style="text-align: center">
+                        <div class="following-container">
+                            <h3>Followers</h3>
+                            
+                            {%block content%}
+                            {%if data%}
+                            {% for c in data%}
+                            <form class="form-inline" id="friends-list" action='/core/follower' method="post">
+                                {%csrf_token%}
+
+                                <div class="mx-sm-auto mb-2">
+                                    <input type="text" style="width:130%;padding: 2px; text-align: center;border-width:0px;
+border:none;font-size:19px;font-weight:700" name="friend"
+                                        value={{c.user}} readonly>
+                                    <input type="text" style="width:20px;padding: 2px; text-align: center;border-width:0px;
+border:none;" name="status"
+                                        value={{c.status}} readonly hidden>
+                                </div>
+                                <button class="btn btn-primary mx-sm-auto mb-2" id="btn-1">{{c.status}}</button>
+                            </form>
+                            {%endfor%}
+                            {%else%}
+                            <h5>Oops!! You Don't Have Anybody Following You!</h5>
+                            {%endif%}
+                        </div>
+
+                    </div>
+                      <div class="col-xs-6 col-md-4">
+                      <div class="notification">
+                          <h3>Notifications</h3>
+                          <div class="test">
+                              {%if dd1%}
+                              {% for c in dd1%}
+                                                             <div class="accordion" id="accordionExample">
+
+                              <div class="panel-group">
+                                  <div class="panel panel-default">
+                                      <div class="panel-heading">
+                                          <h5 class="panel-title">
+                                              <a class="toggle" data-toggle="collapse" aria-expanded="false"
+                                                  href="#{{c.handle}}" aria-controls="collapseExample">
+                                                  {{c.handle}} <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                              </a>
+                                          </h5>
+                                      </div>
+                                      <div id={{c.handle}} class="collapse tweets" data-target="#{{c.handle}}"
+                                          aria-expanded="false" data-parent="#accordionExample">
+                                          <hr>
+                                          {% for d in c.tweet_arr%}
+                                          <div id="tweets-arr" class="toggle">
+                                             <b>{{ d.date }}</b> <br>
+                                                    {{d.tweet}}
+                                                    <hr>
+                                               
+                                          </div>
+                                          {%endfor%}
+                                      </div>
+                                      {%endfor%}
+                                  </div>
+                                  {%else%}
+                                  <div class="no-noti">
+                                      <h5>You don't have any notifications.</h5>
+                                      {%endif%}
+                                  </div>
+                              </div>
+                              {%endblock%}
+                          </div>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+        // Add active class to the current button (highlight it)
+        var header = document.getElementById("sidebar");
+
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function () {
+                var current = document.getElementById("active");
+                if (current.length > 0) {
+                    current[0].className = current[0].className.replace(" active", "");
+                }
+                this.className += " active";
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>
